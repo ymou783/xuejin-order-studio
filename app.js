@@ -44,6 +44,11 @@ function readCompanionFromRemark(remark) {
 
 function parseNotice() {
   const text = fields.notice.value;
+  if (!text.trim()) {
+    renderReceipt();
+    setStatus("等待粘贴订单通知。", false);
+    return;
+  }
   const values = {
     orderId: readLine(text, "订单号"), amount: readLine(text, "订单金额"), project: readLine(text, "陪玩项目"),
     gameType: readLine(text, "游戏类型"), remark: readLine(text, "下单项目")
