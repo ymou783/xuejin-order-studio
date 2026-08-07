@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>结单小票 · 雪烬电竞</title>
+    <link rel="icon" href="favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="settlement.css" />
+  </head>
+  <body>
+    <main class="settlement-shell">
+      <header class="settlement-topbar">
+        <a href="index.html">← 小票工坊</a>
+        <div class="settlement-brand"><span>⛰</span> 雪烬电竞 · <b>结单小票</b></div>
+        <span aria-hidden="true"></span>
+      </header>
+
+      <section class="settlement-layout">
+        <div class="settlement-ticket-stage">
+          <article class="receipt settlement-receipt" id="settlementTicket">
+            <div class="receipt-topline" aria-hidden="true"><span class="top-spark">✦　⌁　✦</span><span class="brand-mini">雪烬电竞·</span></div>
+            <div class="cat-line" aria-hidden="true">/\___/\<br />꒰ ⸝⸝ɞ̴̶̷ ·̮ ɞ̴̶̷ ⸝⸝꒱‎</div>
+            <div class="receipt-title">结单小票</div>
+            <div class="receipt-badge">✦ 三角洲小记 ✦</div>
+            <div class="receipt-seal" aria-hidden="true">
+              <svg viewBox="0 0 160 86" role="img"><circle cx="80" cy="43" r="28"></circle><path d="M58 51 70 36 77 43 87 29 102 51M60 55h41M49 43h-12m124 0h-12M53 25l-8-8m62 8 8-8M52 64l-8 8m64-8 8 8"></path><path d="M74 57 80 49 86 57" class="seal-fill"></path></svg>
+            </div>
+            <div class="receipt-rule"></div>
+            <div class="receipt-lines">
+              <div class="receipt-line"><b><i>◷</i> 时间</b><span id="settlementDate">--</span></div>
+              <div class="receipt-line"><b><i>⚔</i> 类型</b><span id="settlementType">--</span></div>
+              <div class="receipt-line"><b><i>▤</i> 金额</b><span class="amount-value" id="settlementAmount">--</span></div>
+              <div class="receipt-line"><b><i>⌁</i> 板板</b><span id="settlementBoard" class="empty-value">待填写</span></div>
+              <div class="receipt-line"><b><i>⌁</i> 陪陪</b><span id="settlementCompanion" class="empty-value">待填写</span></div>
+            </div>
+            <div class="receipt-rule"></div>
+            <div class="order-id-line"><span>▣ 订单号</span><code id="settlementOrderId">--</code></div>
+            <div class="settlement-order-note" id="settlementOrderNote">备注：无陪陪修改记录</div>
+            <div class="receipt-line settlement-stat-line"><b><i>🫧</i> 战绩</b><span id="settlementRecord">--</span></div>
+            <div class="receipt-line settlement-stat-line"><b><i>🎀</i> 共得吃</b><span id="settlementEaten">--</span></div>
+            <div class="receipt-date-line"><span>▦ 日期</span><span id="settlementDateLong">--</span></div>
+            <div class="receipt-landscape" aria-hidden="true">
+              <svg viewBox="0 0 360 96" preserveAspectRatio="none"><path d="M0 83 33 56 56 75 91 25 118 66 151 38 184 74 224 19 256 66 291 42 324 75 360 55v41H0Z"></path><path d="M0 84h360M91 25l-9 25 18-9 14 19M224 19l-12 32 17-10 18 25M151 38l-7 28 14-11 15 20"></path><path d="M22 82v-20m-8 20 8-12 8 12M318 82V58m-9 24 9-14 9 14"></path></svg>
+              <div class="receipt-stamp" aria-hidden="true"><svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="24"></circle><circle cx="21" cy="23" r="4"></circle><circle cx="30" cy="19" r="4"></circle><circle cx="39" cy="23" r="4"></circle><path d="M21 35c0-7 18-7 18 0 0 7-18 7-18 0Z"></path></svg></div>
+            </div>
+            <div class="settlement-thanks">୨୧ °˖⋆࿐໋₊　°˖⋆࿐໋₊　ᘏ▸◂ᘏ<br /><strong>ʚ🌸　感谢板板支持　🌸ɞ</strong></div>
+            <div class="settlement-feedback">
+              <div class="settlement-feedback-title">本次服务评价</div>
+              <div class="settlement-feedback-row"><span>操作技术</span><strong id="technicalSummary">--</strong></div>
+              <div class="settlement-feedback-row"><span>服务态度</span><strong id="attitudeSummary">--</strong></div>
+              <div class="settlement-feedback-note"><span>老板备注</span><p id="feedbackSummaryNote">未填写</p></div>
+            </div>
+            <div class="ticket-footer">╰ ────────── ╯</div>
+          </article>
+        </div>
+        <div class="settlement-actions"><button id="saveImageButton" type="button">保存小票图片 PNG</button><a id="returnRoom" href="#">返回服务房间 <span>↗</span></a></div>
+      </section>
+    </main>
+    <script src="settlement.js"></script>
+  </body>
+</html>

@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>服务房间 · 雪烬电竞</title>
+    <link rel="icon" href="favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="room.css" />
+  </head>
+  <body>
+    <div class="room-shell">
+      <header class="room-topbar">
+        <div class="room-brand"><span class="room-mark">⛰</span><span>雪烬电竞 · <b>服务房间</b></span></div>
+        <div class="room-code"><span>ROOM</span><code id="roomIdTop">--</code></div>
+      </header>
+
+      <main>
+        <section class="room-intro">
+          <div>
+            <p class="room-kicker">LIVE SERVICE ROOM</p>
+            <h1>保底计算台</h1>
+            <p>记录每一局撤离结果，实时计算剩余保底、撤离率和总共得吃金额。</p>
+          </div>
+          <div class="order-key-block"><span>订单唯一 Key</span><code id="roomKey">--</code></div>
+        </section>
+
+        <section class="room-grid">
+          <aside class="room-controls">
+            <div class="balance-card" id="balanceCard">
+              <div class="balance-label"><span class="pulse-dot"></span>当前剩余保底</div>
+              <div class="balance-value"><strong id="remainingGuarantee">--</strong><span>W</span></div>
+              <p id="guaranteeHint">设置基础保底后开始计算</p>
+            </div>
+
+            <div class="action-card">
+              <div class="card-heading">
+                <div><span class="card-kicker">RECORD</span><h2>记录本局</h2></div>
+                <span class="round-state" id="roundState">等待开始</span>
+              </div>
+
+              <div class="action-block success-block">
+                <div class="action-heading"><span class="action-icon success-icon">↗</span><div><h3>撤离成功</h3><p>输入打手本局撤离价值</p></div></div>
+                <div class="value-entry"><label for="successValue">撤离价值</label><div class="value-input"><input id="successValue" type="number" min="0" step="0.01" placeholder="0" /><span>W</span></div><button class="record-button success-button" id="successButton" type="button">记录成功</button></div>
+              </div>
+
+              <div class="action-block failure-block">
+                <div class="action-heading"><span class="action-icon failure-icon">×</span><div><h3>撤离失败</h3><p>选择本局失败后的保底处理方式</p></div></div>
+                <div class="failure-modes" role="group" aria-label="撤离失败处理方式">
+                  <button class="mode-button active" data-mode="plus60" type="button"><span>+60W</span> 加保底</button>
+                  <button class="mode-button" data-mode="none" type="button"><span>0W</span> 只记录</button>
+                  <button class="mode-button" data-mode="manual" type="button"><span>自填</span> 金额+60W</button>
+                </div>
+                <div class="manual-failure" id="manualFailure" hidden><label for="failureValue">撤离金额</label><div class="value-input"><input id="failureValue" type="number" min="0" step="0.01" placeholder="0" /><span>W</span></div></div>
+                <button class="record-button failure-button" id="failureButton" type="button">记录失败 · +60W 保底</button>
+              </div>
+
+              <div class="action-block guarantee-block">
+                <div class="action-heading"><span class="action-icon guarantee-icon">＋</span><div><h3>追加基础保底</h3><p>只增加保底，不计入成功、失败或得吃金额</p></div></div>
+                <div class="value-entry guarantee-entry"><label for="guaranteeValue">增加保底</label><div class="value-input"><input id="guaranteeValue" class="guarantee-input" type="number" min="0" step="0.01" placeholder="0" /><span>W</span></div><button class="record-button guarantee-button" id="addGuaranteeButton" type="button">增加保底</button></div>
+              </div>
+              <div class="action-block companion-block">
+                <div class="action-heading"><span class="action-icon companion-icon">⌁</span><div><h3>修改打手（陪陪）</h3><p>可多次修改，结单时显示最后一位陪陪</p></div></div>
+                <div class="companion-current"><span>当前陪陪</span><strong id="currentCompanion">待填写</strong></div>
+                <div class="value-entry companion-entry"><label for="companionInput">新的陪陪名字</label><div class="value-input"><input id="companionInput" class="companion-input" type="text" placeholder="输入打手 / 陪陪名字" /><span>⌁</span></div><button class="record-button companion-button" id="changeCompanionButton" type="button">保存修改</button></div>
+                <p class="companion-history" id="companionHistory">暂未修改</p>
+              </div>
+              <p class="action-status" id="actionStatus" aria-live="polite">每次点击只记录一局。</p>
+            </div>
+
+            <button class="reset-room" id="adjustGuaranteeButton" type="button">调整当前保底 <span>＋ / −</span></button>
+            <button class="end-order-button" id="endOrderButton" type="button" disabled>结束订单 <span>↗</span></button>
+          </aside>
+
+          <section class="room-results">
+            <div class="stats-grid">
+              <div class="stat-card"><span class="stat-label">成功撤离</span><strong id="successCount">0</strong><small>局</small></div>
+              <div class="stat-card"><span class="stat-label">总游戏场数</span><strong id="totalGames">0</strong><small>局</small></div>
+              <div class="stat-card accent-stat"><span class="stat-label">撤离率</span><strong id="successRate">0%</strong><small>成功 / 总场数</small></div>
+              <div class="stat-card"><span class="stat-label">总共得吃金额</span><strong id="totalEaten">0</strong><small>W</small></div>
+            </div>
+
+            <div class="records-card">
+              <div class="records-heading"><div><span class="card-kicker">TIMELINE</span><h2>操作记录</h2></div><span class="record-count" id="recordCount">0 条</span></div>
+              <div class="records-list" id="recordsList"><div class="empty-records"><span>✦</span><p>还没有记录</p><small>完成第一局后，记录会出现在这里。</small></div></div>
+            </div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <div class="ended-banner" id="endedBanner" hidden><span>⚠</span><div><strong>游戏结束</strong><small>基础保底已经小于 0，当前房间已停止继续记录。</small></div></div>
+
+    <div class="baseline-modal" id="baselineModal">
+      <div class="baseline-dialog">
+        <div class="dialog-symbol">⛰</div>
+        <span class="room-kicker">STEP 01 · INITIALIZE</span>
+        <h2>设置基础保底</h2>
+        <p>这是本订单房间的初始保底，必须填写后才能开始记录。单位为 W。</p>
+        <label class="baseline-label" for="baseGuaranteeInput">基础保底</label>
+        <div class="baseline-input"><input id="baseGuaranteeInput" type="number" step="0.01" placeholder="例如 300" autofocus /><span>W</span></div>
+        <button class="dialog-button" id="startRoomButton" type="button">开始计算 <span>→</span></button>
+        <p class="dialog-error" id="baselineError" aria-live="polite"></p>
+      </div>
+    </div>
+
+    <div class="feedback-modal" id="feedbackModal" hidden>
+      <div class="feedback-dialog">
+        <span class="room-kicker">STEP 02 · FEEDBACK</span>
+        <h2>结单前，听听老板的反馈</h2>
+        <p>请为本次服务打分，帮助我们做后续管理和培训。</p>
+
+        <fieldset class="score-fieldset">
+          <legend>1. 操作技术评价</legend>
+          <div class="score-options">
+            <label><input type="radio" name="technicalScore" value="1" /> <span>1 满意</span></label>
+            <label><input type="radio" name="technicalScore" value="2" /> <span>2 一般</span></label>
+            <label><input type="radio" name="technicalScore" value="3" /> <span>3 不满意</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="score-fieldset">
+          <legend>2. 服务态度评价</legend>
+          <div class="score-options">
+            <label><input type="radio" name="attitudeScore" value="1" /> <span>1 满意</span></label>
+            <label><input type="radio" name="attitudeScore" value="2" /> <span>2 一般</span></label>
+            <label><input type="radio" name="attitudeScore" value="3" /> <span>3 不满意</span></label>
+          </div>
+        </fieldset>
+
+        <label class="feedback-note-label" for="feedbackNote">意见和建议 <small>可选</small></label>
+        <textarea id="feedbackNote" rows="3" placeholder="可以告诉我们：打手操作是否熟练、打手态度是否耐心、沟通是否顺畅……"></textarea>
+        <p class="dialog-error" id="feedbackError" aria-live="polite"></p>
+        <div class="feedback-actions"><button class="feedback-cancel" id="cancelFeedback" type="button">暂不结单</button><button class="dialog-button" id="submitFeedback" type="button">生成结单小票 <span>→</span></button></div>
+      </div>
+    </div>
+
+    <div class="adjustment-modal" id="adjustmentModal" hidden>
+      <div class="adjustment-dialog">
+        <span class="room-kicker">GUARANTEE ADJUSTMENT</span>
+        <h2>调整当前基础保底</h2>
+        <p>输入正数增加保底，输入负数扣减保底。此次调整会留在记录中，但不计入游戏场数、撤离率或得吃金额。</p>
+        <label class="baseline-label" for="adjustGuaranteeInput">调整数值</label>
+        <div class="baseline-input"><input id="adjustGuaranteeInput" type="number" step="0.01" placeholder="例如 +100 或 -50" /><span>W</span></div>
+        <p class="dialog-error" id="adjustmentError" aria-live="polite"></p>
+        <div class="feedback-actions"><button class="feedback-cancel" id="cancelAdjustment" type="button">取消</button><button class="dialog-button" id="submitAdjustment" type="button">保存调整 <span>→</span></button></div>
+      </div>
+    </div>
+
+    <div class="room-toast" id="roomToast" role="status" aria-live="polite"></div>
+    <script src="room.js"></script>
+  </body>
+</html>

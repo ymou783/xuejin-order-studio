@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>雪烬电竞 · 订单小票工坊</title>
+    <link rel="icon" href="favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;600;700;800&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand-lockup">
+          <div class="brand-mark" aria-hidden="true">⛰</div>
+          <div>
+            <div class="brand-name">雪烬电竞<span>·</span></div>
+            <div class="brand-subtitle">订单小票工坊</div>
+          </div>
+        </div>
+        <div class="time-chip">
+          <span class="live-dot"></span>
+          <span>北京时间</span>
+          <span class="time-divider">/</span>
+          <span id="beijingClock">--:--:--</span>
+        </div>
+        <a class="admin-link" href="admin.html">后台管理 <span>↗</span></a>
+      </header>
+
+      <main class="workspace">
+        <section class="intro-row">
+          <div>
+            <p class="eyebrow">ORDER RECEIPT STUDIO</p>
+            <h1>把订单通知，<em>变成一张小票。</em></h1>
+            <p class="intro-copy">粘贴通知，补上陪陪信息，一键生成可复制的小票文案。</p>
+          </div>
+          <div class="step-note"><span>01</span> 粘贴 &nbsp;·&nbsp; <span>02</span> 生成 &nbsp;·&nbsp; <span>03</span> 复制</div>
+        </section>
+
+        <div class="studio-grid">
+          <section class="control-panel" aria-label="订单信息输入">
+            <div class="panel-heading">
+              <div>
+                <span class="section-kicker">INPUT</span>
+                <h2>订单通知</h2>
+              </div>
+              <button class="ghost-button" id="parseButton" type="button">解析通知 <span>↗</span></button>
+            </div>
+
+            <label class="field-label" for="noticeInput">粘贴原始通知</label>
+            <textarea id="noticeInput" spellcheck="false">新订单待受理通知
+订单号    D_260807225854_394128
+订单金额    ¥188
+陪玩项目    机密提升单！
+游戏类型    端游
+下单项目    备注：梓梓派 风-云衫</textarea>
+            <p class="helper-text">支持“订单号 / 订单金额 / 陪玩项目 / 游戏类型 / 下单项目”字段。</p>
+
+            <div class="field-section-title"><span></span> 自动读取</div>
+            <div class="field-grid">
+              <div class="field-wrap">
+                <label class="field-label" for="orderId">订单号</label>
+                <input id="orderId" type="text" value="D_260807225854_394128" />
+              </div>
+              <div class="field-wrap">
+                <label class="field-label" for="amount">金额</label>
+                <div class="input-prefix"><span>¥</span><input id="amount" type="text" value="188" inputmode="decimal" /></div>
+              </div>
+              <div class="field-wrap">
+                <label class="field-label" for="project">陪玩项目</label>
+                <input id="project" type="text" value="机密提升单！" />
+              </div>
+              <div class="field-wrap">
+                <label class="field-label" for="gameType">游戏类型</label>
+                <input id="gameType" type="text" value="端游" />
+              </div>
+            </div>
+
+            <div class="field-section-title manual-title"><span></span> 小票内容</div>
+            <div class="field-grid">
+              <div class="field-wrap">
+                <label class="field-label" for="receiptType">类型 <small>自动读取</small></label>
+                <input id="receiptType" type="text" value="" placeholder="读取陪玩项目" />
+              </div>
+              <div class="field-wrap accent-field">
+                <label class="field-label" for="boardName">板板 <small>手动填写</small></label>
+                <input id="boardName" type="text" placeholder="输入板板名字" autocomplete="off" />
+              </div>
+              <div class="field-wrap">
+                <label class="field-label" for="companionName">陪陪 <small>自动读取</small></label>
+                <input id="companionName" type="text" value="" placeholder="读取“派”后的名称" />
+              </div>
+              <div class="field-wrap">
+                <label class="field-label" for="dateValue">日期 <small>北京时间</small></label>
+                <input id="dateValue" type="text" readonly />
+              </div>
+            </div>
+
+            <div class="field-wrap note-wrap">
+              <label class="field-label" for="remark">备注 <small>可选</small></label>
+              <input id="remark" type="text" value="梓梓派 风-云衫" placeholder="下单备注" />
+            </div>
+
+            <div class="action-row">
+              <button class="primary-button" id="generateButton" type="button">生成小票 <span>✦</span></button>
+              <button class="secondary-button" id="copyButton" type="button">复制小票 <span>⌘ C</span></button>
+              <button class="secondary-button" id="saveButton" type="button">保存图片 <span>PNG</span></button>
+            </div>
+            <div class="service-row">
+              <button class="service-button" id="startServiceButton" type="button">开始服务 <span>↗</span></button>
+              <span>生成小票时自动创建独立房间</span>
+            </div>
+            <div class="room-link-row" id="roomLinkRow" hidden>
+              <span class="room-link-label">房间链接</span>
+              <a id="roomLink" href="#">--</a>
+              <button id="copyRoomLink" type="button">复制链接</button>
+            </div>
+            <div class="status-line" id="statusLine" aria-live="polite">修改内容后点击“生成小票”即可更新预览。</div>
+          </section>
+
+          <section class="preview-panel" aria-label="小票预览">
+            <div class="preview-heading">
+              <div>
+                <span class="section-kicker">PREVIEW</span>
+                <h2>小票预览</h2>
+              </div>
+              <span class="preview-state"><i></i> 已就绪</span>
+            </div>
+            <div class="receipt-stage">
+              <article class="receipt" id="receiptCard">
+                <div class="receipt-topline" aria-hidden="true"><span class="top-spark">✦　⌁　✦</span><span class="brand-mini">雪烬电竞·</span></div>
+                <div class="cat-line" aria-hidden="true">/\___/\<br />꒰ ⸝⸝ɞ̴̶̷ ·̮ ɞ̴̶̷ ⸝⸝꒱‎</div>
+                <div class="receipt-title">订单小票</div>
+                <div class="receipt-badge">✦ 三角洲小记 ✦</div>
+                <div class="receipt-seal" aria-hidden="true">
+                  <svg viewBox="0 0 160 86" role="img">
+                    <circle cx="80" cy="43" r="28"></circle>
+                    <path d="M58 51 70 36 77 43 87 29 102 51M60 55h41M49 43h-12m124 0h-12M53 25l-8-8m62 8 8-8M52 64l-8 8m64-8 8 8"></path>
+                    <path d="M74 57 80 49 86 57" class="seal-fill"></path>
+                  </svg>
+                </div>
+                <div class="receipt-rule"></div>
+                <div class="receipt-lines">
+                  <div class="receipt-line"><b><i>◷</i> 时间</b><span id="previewDate">8月8日</span></div>
+                  <div class="receipt-line"><b><i>⚔</i> 类型</b><span id="previewType">体验单</span></div>
+                  <div class="receipt-line"><b><i>▤</i> 金额</b><span class="amount-value">¥<span id="previewAmount">188</span></span></div>
+                  <div class="receipt-line"><b><i>⌁</i> 板板</b><span id="previewBoard" class="empty-value">待填写</span></div>
+                  <div class="receipt-line"><b><i>⌁</i> 陪陪</b><span id="previewCompanion">灵珠魔丸</span></div>
+                </div>
+                <div class="receipt-rule"></div>
+                <div class="order-id-line"><span>▣ 订单号</span><code id="previewOrderId">D_260807225854_394128</code></div>
+                <div class="receipt-note" id="previewNote">备注：梓梓派 风-云衫</div>
+                <div class="receipt-extra" id="previewExtra">机密提升单！ · 端游</div>
+                <div class="receipt-date-line"><span>▦ 日期</span><span id="previewDateLong">2026-08-08</span></div>
+                <div class="receipt-landscape" aria-hidden="true">
+                  <svg viewBox="0 0 360 96" preserveAspectRatio="none">
+                    <path d="M0 83 33 56 56 75 91 25 118 66 151 38 184 74 224 19 256 66 291 42 324 75 360 55v41H0Z"></path>
+                    <path d="M0 84h360M91 25l-9 25 18-9 14 19M224 19l-12 32 17-10 18 25M151 38l-7 28 14-11 15 20"></path>
+                    <path d="M22 82v-20m-8 20 8-12 8 12M318 82V58m-9 24 9-14 9 14"></path>
+                  </svg>
+                  <div class="receipt-stamp" aria-hidden="true"><svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="24"></circle><circle cx="21" cy="23" r="4"></circle><circle cx="30" cy="19" r="4"></circle><circle cx="39" cy="23" r="4"></circle><path d="M21 35c0-7 18-7 18 0 0 7-18 7-18 0Z"></path></svg></div>
+                </div>
+                <div class="receipt-footer" aria-hidden="true"><span>✦</span><span>谢谢惠顾 · Have a nice game</span><span>✦</span></div>
+              </article>
+            </div>
+            <div class="preview-footnote"><span>TIP</span> 票据会按北京时间自动显示当天日期。</div>
+          </section>
+        </div>
+      </main>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,5 @@
+.playwright-cli/
+work/
+outputs/
+node_modules/
+

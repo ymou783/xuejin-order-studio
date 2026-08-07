@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>房间后台 · 雪烬电竞</title>
+    <link rel="icon" href="favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+  <body>
+    <div class="admin-shell">
+      <header class="admin-topbar">
+        <a class="back-link" href="index.html">← 订单小票</a>
+        <div class="admin-brand"><span>⛰</span><strong>雪烬电竞</strong><b>房间后台</b></div>
+        <span class="admin-clock" id="adminClock">北京时间 --:--:--</span>
+      </header>
+
+      <main>
+        <section class="admin-intro">
+          <div><p class="admin-kicker">ROOM CONTROL CENTER</p><h1>所有房间，都在这里。</h1><p>按订单号管理独立网页、订单小票、服务过程和结单记录。</p></div>
+          <button class="primary-admin-button" id="openCreateRoom" type="button">创建房间 <span>＋</span></button>
+        </section>
+
+        <section class="admin-stats">
+          <div><span>全部房间</span><strong id="totalRooms">0</strong></div>
+          <div><span>服务中</span><strong id="activeRooms">0</strong></div>
+          <div><span>待结单</span><strong id="pendingRooms">0</strong></div>
+          <div><span>已结单</span><strong id="closedRooms">0</strong></div>
+        </section>
+
+        <section class="directory-card">
+          <div class="directory-head"><div><p class="admin-kicker">ROOM DIRECTORY</p><h2>房间与网页链接</h2></div><div class="directory-tools"><input id="searchRooms" type="search" placeholder="搜索订单号 / 陪陪" /><select id="statusFilter"><option value="all">全部状态</option><option value="待开局">待开局</option><option value="服务中">服务中</option><option value="待结单">待结单</option><option value="已结单">已结单</option></select><button id="refreshRooms" type="button">刷新</button></div></div>
+          <div class="room-list" id="roomsList"></div>
+        </section>
+      </main>
+    </div>
+
+    <div class="admin-modal" id="createModal" hidden>
+      <div class="admin-dialog small-dialog">
+        <button class="dialog-close" data-close="createModal" type="button">×</button>
+        <p class="admin-kicker">NEW ROOM</p><h2>创建独立服务房间</h2><p class="dialog-copy">订单号会作为这个房间以及后续日志的唯一 key。</p>
+        <label for="newOrderId">订单号</label><input id="newOrderId" type="text" placeholder="例如 D_260807225854_394128" />
+        <div class="two-fields"><div><label for="newAmount">金额</label><input id="newAmount" type="text" placeholder="188" /></div><div><label for="newCompanion">陪陪</label><input id="newCompanion" type="text" placeholder="可选" /></div></div>
+        <label for="newType">小票类型</label><input id="newType" type="text" value="体验单" />
+        <p class="form-error" id="createError"></p><button class="primary-admin-button full-button" id="createRoom" type="button">创建并打开房间 <span>→</span></button>
+      </div>
+    </div>
+
+    <div class="admin-modal" id="logsModal" hidden>
+      <div class="admin-dialog logs-dialog">
+        <button class="dialog-close" data-close="logsModal" type="button">×</button>
+        <p class="admin-kicker">ROOM LOGS</p><h2 id="logsTitle">订单日志</h2><p class="logs-subtitle" id="logsSubtitle">--</p>
+        <div class="log-actions"><a id="openOrderStep" href="#" target="_blank">订单小票 ↗</a><a id="openRoomStep" href="#" target="_blank">服务房间 ↗</a><a id="openSettlementStep" href="#" target="_blank">结单小票 ↗</a></div>
+        <div id="logContent"></div>
+      </div>
+    </div>
+
+    <div class="admin-toast" id="adminToast" role="status" aria-live="polite"></div>
+    <script src="admin.js"></script>
+  </body>
+</html>
