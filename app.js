@@ -38,8 +38,9 @@ function readLine(text, label) {
 }
 
 function readCompanionFromRemark(remark) {
-  const match = String(remark).match(/派(?:单)?\s*[:：]?\s*(.+)$/);
-  return match ? match[1].trim() : "";
+  const normalized = String(remark || "").replace(/^\s*备注\s*[:：]?\s*/i, "").trim();
+  const match = normalized.match(/派(?:单)?\s*[:：]?\s*(.+)$/);
+  return match ? match[1].trim().replace(/^[：:、，,\s]+/, "") : "";
 }
 
 function parseNotice() {
@@ -54,7 +55,7 @@ function parseNotice() {
     gameType: readLine(text, "游戏类型"), remark: readLine(text, "下单项目")
   };
   if (values.amount) values.amount = values.amount.replace(/[¥￥,\s]/g, "");
-  values.remark = values.remark.replace(/^备注\s*[:：]\s*/, "").trim();
+  values.remark = values.remark.replace(/^备注\s*[:：]?\s*/i, "").trim();
   const companion = readCompanionFromRemark(values.remark);
   if (values.project) fields.receiptType.value = values.project;
   if (companion) fields.companion.value = companion;
@@ -91,15 +92,13 @@ function receiptText() {
   const note = fields.remark.value.trim();
   const extras = [fields.project.value.trim(), fields.gameType.value.trim()].filter(Boolean).join(" · ");
   const lines = [
-    "/\\__/\\       ⛰雪烬电竞·",
-    "   ꒰ ⸝⸝ɞ̴̶̷ ·̮ ɞ̴̶̷ ⸝⸝꒱‎   订单小票",
-    "╭ ── 🅻🅾🆅🅴 ᰔᩚᥫᩣ ── ╮",
-    "ᕳ♡ᕲ 三角洲小记",
-    `🎀时间：${fields.date.value}`,
-    `🫧类型：${fields.receiptType.value.trim() || "体验单"}`,
-    `🎀金额：${fields.amount.value.trim() || "0"}`,
-    `🫧板板：${board}`,
-    `🎀陪陪：${companion}`,
+    "雪烬电竞· 订单小票",
+    "三角洲小记",
+    `时间：${fields.date.value}`,
+    `类型：${fields.receiptType.value.trim() || "体验单"}`,
+    `金额：${fields.amount.value.trim() || "0"}`,
+    `板板：${board}`,
+    `陪陪：${companion}`,
     `订单号：${fields.orderId.value.trim() || "待填写"}`
   ];
   if (note) lines.push(`备注：${note}`);
@@ -217,7 +216,6 @@ function exportReceiptSvg() {
     <rect x="95" y="45" width="810" height="1410" fill="url(#grain)" opacity=".85"/>
     ${Array.from({length:33}, (_, i) => `<circle cx="95" cy="${75 + i * 43}" r="7" fill="#e9e0db"/><circle cx="905" cy="${75 + i * 43}" r="7" fill="#e9e0db"/>`).join("")}
     <text x="145" y="105" class="red" font-size="20">✦　⌁　✦</text><text x="855" y="105" text-anchor="end" class="ink" font-size="22" font-weight="800">雪烬电竞·</text>
-    <text x="500" y="151" text-anchor="middle" class="ink" font-size="23" font-family="DM Mono">/\\___/\\</text><text x="500" y="177" text-anchor="middle" class="ink" font-size="22" font-family="DM Mono">꒰ ⸝⸝ɞ̴̶̷ ·̮ ɞ̴̶̷ ⸝⸝꒱‎</text>
     <text x="500" y="254" text-anchor="middle" class="title">订单小票</text>
     <rect x="346" y="276" width="308" height="42" rx="4" fill="#bd5148"/><text x="500" y="305" text-anchor="middle" fill="#fff9ef" font-size="23" font-weight="700" font-family="Noto Sans SC">✦ 三角洲小记 ✦</text>
     <circle cx="500" cy="396" r="62" fill="none" stroke="#2e2930" stroke-width="4"/><path d="M450 414 477 380 491 395 510 363 548 414M455 424h90M430 396h-27m144 0h-27M454 356l-18-18m110 18 18-18M453 440l-18 18m110-18 18 18" fill="none" stroke="#2e2930" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M487 429 500 410 513 429Z" fill="#2e2930"/>
@@ -262,7 +260,6 @@ function exportReceiptSvgCompact() {
     <rect x="88" y="36" width="824" height="1308" fill="url(#grain-compact)" opacity=".85"/>
     ${Array.from({length:30}, (_, i) => `<circle cx="88" cy="${66 + i * 43}" r="7" fill="#e9e0db"/><circle cx="912" cy="${66 + i * 43}" r="7" fill="#e9e0db"/>`).join("")}
     <text x="142" y="97" class="red" font-size="20">✦　⌁　✦</text><text x="858" y="97" text-anchor="end" class="ink" font-size="22" font-weight="800">雪烬电竞·</text>
-    <text x="500" y="150" text-anchor="middle" class="ink" font-size="23" font-family="DM Mono">/\\___/\\</text><text x="500" y="177" text-anchor="middle" class="ink" font-size="22" font-family="DM Mono">꒰ ⸝⸝ɞ̴̶̷ ·̮ ɞ̴̶̷ ⸝⸝꒱‎</text>
     <text x="500" y="252" text-anchor="middle" class="title">订单小票</text>
     <rect x="344" y="275" width="312" height="42" rx="4" fill="#bd5148"/><text x="500" y="304" text-anchor="middle" fill="#fff9ef" font-size="23" font-weight="700" font-family="Noto Sans SC">✦ 三角洲小记 ✦</text>
     <circle cx="500" cy="391" r="60" fill="none" stroke="#2e2930" stroke-width="4"/><path d="M451 411 477 378 491 393 510 360 549 411M455 421h91M430 391h-27m144 0h-27M454 352l-18-18m110 18 18-18M453 437l-18 18m110-18 18 18" fill="none" stroke="#2e2930" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M487 426 500 407 513 426Z" fill="#2e2930"/>
@@ -332,12 +329,11 @@ async function saveReceiptImage() {
 
 function polishReceiptSvg(svg) {
   return svg
-    .replace(/\s*<text x="500" y="150"[\s\S]*?<\/text><text x="500" y="177"[\s\S]*?<\/text>/, "")
-    .replace(/font-size="22" font-weight="800">雪烬电竞·/, 'font-size="30" font-weight="800">雪烬电竞·')
-    .replace(/font-size:27px/g, "font-size:30px")
-    .replace(/font-size:25px/g, "font-size:28px")
-    .replace(/font-size:19px/g, "font-size:21px")
-    .replace(/font-size:58px/g, "font-size:64px");
+    .replace(/font-size="22" font-weight="800">雪烬电竞·/, 'font-size="34" font-weight="800">雪烬电竞·')
+    .replace(/font-size:27px/g, "font-size:33px")
+    .replace(/font-size:25px/g, "font-size:31px")
+    .replace(/font-size:19px/g, "font-size:23px")
+    .replace(/font-size:58px/g, "font-size:70px");
 }
 
 async function copyReceipt() {

@@ -20,22 +20,23 @@ body::before { content:""; position:fixed; inset:0; pointer-events:none; opacity
 @media print { body { background:#fff; }.settlement-shell { padding:0; }.settlement-topbar,.settlement-actions { display:none; }.settlement-layout { padding:0; }.settlement-ticket-stage { width:100%; padding:0; background:none; box-shadow:none; }.settlement-receipt { width:100%; max-width:520px; margin:0 auto; box-shadow:none; transform:none; } }
 
 /* Keep the settlement summary readable and leave a clear gap before the landscape. */
-.settlement-receipt .receipt-topline { font-size:15px; }
-.settlement-receipt .brand-mini { font-size:15px; }
-.settlement-receipt .receipt-title { font-size:34px; }
-.settlement-receipt .receipt-badge { font-size:13px; }
-.settlement-receipt .receipt-line { min-height:43px; font-size:13px; }
+.settlement-receipt .receipt-topline { font-size:16px; }
+.settlement-receipt .brand-mini { font-size:20px; letter-spacing:-.02em; }
+.settlement-receipt .receipt-title { font-size:38px; }
+.settlement-receipt .receipt-badge { font-size:14px; }
+.settlement-receipt .receipt-line { min-height:47px; font-size:14px; }
 .settlement-receipt .settlement-stat-line { min-height:39px !important; }
-.settlement-receipt .receipt-date-line { margin-top:14px; font-size:12px; }
+.settlement-receipt .receipt-date-line { position:relative; z-index:2; margin-top:16px; padding:10px 0 5px; background:var(--settle-paper); font-size:13px; }
 .settlement-receipt .receipt-date-line span:last-child { font-size:11px; }
-.settlement-receipt .receipt-landscape { margin-top:14px; }
+.settlement-receipt .receipt-landscape { margin-top:14px; z-index:1; }
 .settlement-thanks { margin-top:11px; }
 
 @media (max-width:620px) {
-  .settlement-receipt .receipt-title { font-size:30px; }
-  .settlement-receipt .receipt-line { min-height:39px; font-size:12px; }
+  .settlement-receipt .receipt-title { font-size:32px; }
+  .settlement-receipt .brand-mini { font-size:16px; }
+  .settlement-receipt .receipt-line { min-height:42px; font-size:12px; }
   .settlement-receipt .settlement-stat-line { min-height:36px !important; }
-  .settlement-receipt .receipt-date-line { margin-top:12px; }
+  .settlement-receipt .receipt-date-line { margin-top:14px; padding-top:9px; }
   .settlement-receipt .receipt-landscape { margin-top:12px; }
 }
 
@@ -50,9 +51,9 @@ body::before { content:""; position:fixed; inset:0; pointer-events:none; opacity
 .settlement-order-head code { min-width:0; color:#4d3c4c; font:12px/1.35 "DM Mono",monospace; text-align:right; overflow-wrap:anywhere; }
 .settlement-order-note { margin:9px 0 0; font-size:10px; line-height:1.45; }
 .settlement-summary { display:grid; margin-top:4px; }
-.settlement-summary-row { display:grid; grid-template-columns:34% minmax(0,1fr); align-items:center; min-height:43px; gap:12px; border-top:1px dashed rgba(201,190,177,.72); }
-.settlement-summary-row > span { color:var(--settle-ink); font-size:13px; font-weight:800; white-space:nowrap; }
-.settlement-summary-row strong { min-width:0; color:#4d3c4c; font:12px/1.35 "DM Mono",monospace; text-align:right; overflow-wrap:anywhere; }
+.settlement-summary-row { display:grid; grid-template-columns:34% minmax(0,1fr); align-items:center; min-height:47px; gap:12px; border-top:1px dashed rgba(201,190,177,.72); }
+.settlement-summary-row > span { color:var(--settle-ink); font-size:14px; font-weight:800; white-space:nowrap; }
+.settlement-summary-row strong { min-width:0; color:#4d3c4c; font:13px/1.35 "DM Mono",monospace; text-align:right; overflow-wrap:anywhere; }
 .settlement-summary-row:nth-child(2) strong { color:var(--settle-green); }
 .settlement-date-line { display:grid; grid-template-columns:34% minmax(0,1fr); align-items:center; margin-top:12px; padding-top:13px; border-top:1px solid #bfb4a9; gap:12px; color:var(--settle-ink); font-size:13px; font-weight:800; }
 .settlement-date-line strong { color:#6d5b68; font:12px "DM Mono",monospace; text-align:right; }

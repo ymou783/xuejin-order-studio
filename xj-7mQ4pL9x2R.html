@@ -27,32 +27,32 @@
       </div>
     </div>
     <div id="adminApp" hidden>
-    <div class="admin-shell">
-      <header class="admin-topbar">
-        <a class="back-link" href="index.html">← 订单小票</a>
-        <div class="admin-brand"><span>⛰</span><strong>雪烬电竞</strong><b>房间后台</b></div>
-        <span class="admin-clock" id="adminClock">北京时间 --:--:--</span>
-      </header>
+      <div class="admin-shell">
+        <header class="admin-topbar">
+          <a class="back-link" href="index.html">← 订单小票</a>
+          <div class="admin-brand"><span>⛰</span><strong>雪烬电竞</strong><b>房间后台</b></div>
+          <span class="admin-clock" id="adminClock">北京时间 --:--:--</span>
+        </header>
 
-      <main>
-        <section class="admin-intro">
-          <div><p class="admin-kicker">ROOM CONTROL CENTER</p><h1>所有房间，都在这里。</h1><p>按订单号管理独立网页、订单小票、服务过程和结单记录。</p></div>
-          <button class="primary-admin-button" id="openCreateRoom" type="button">创建房间 <span>＋</span></button>
-        </section>
+        <main>
+          <section class="admin-intro">
+            <div><p class="admin-kicker">ROOM CONTROL CENTER</p><h1>所有房间，都在这里。</h1><p>按订单号管理独立网页、订单小票、服务过程和结单记录。</p></div>
+            <button class="primary-admin-button" id="openCreateRoom" type="button">创建房间 <span>＋</span></button>
+          </section>
 
-        <section class="admin-stats">
-          <div><span>全部房间</span><strong id="totalRooms">0</strong></div>
-          <div><span>服务中</span><strong id="activeRooms">0</strong></div>
-          <div><span>待结单</span><strong id="pendingRooms">0</strong></div>
-          <div><span>已结单</span><strong id="closedRooms">0</strong></div>
-        </section>
+          <section class="admin-stats">
+            <div><span>全部房间</span><strong id="totalRooms">0</strong></div>
+            <div><span>服务中</span><strong id="activeRooms">0</strong></div>
+            <div><span>待结单</span><strong id="pendingRooms">0</strong></div>
+            <div><span>已结单</span><strong id="closedRooms">0</strong></div>
+          </section>
 
-        <section class="directory-card">
-          <div class="directory-head"><div><p class="admin-kicker">ROOM DIRECTORY</p><h2>房间与网页链接</h2></div><div class="directory-tools"><input id="searchRooms" type="search" placeholder="搜索订单号 / 陪陪" /><select id="statusFilter"><option value="all">全部状态</option><option value="待开局">待开局</option><option value="服务中">服务中</option><option value="待结单">待结单</option><option value="已结单">已结单</option></select><button id="refreshRooms" type="button">刷新</button></div></div>
-          <div class="room-list" id="roomsList"></div>
-        </section>
-      </main>
-    </div>
+          <section class="directory-card">
+            <div class="directory-head"><div><p class="admin-kicker">ROOM DIRECTORY</p><h2>房间与网页链接</h2></div><div class="directory-tools"><input id="searchRooms" type="search" placeholder="搜索订单号 / 陪陪" /><select id="statusFilter"><option value="all">全部状态</option><option value="待开局">待开局</option><option value="服务中">服务中</option><option value="待结单">待结单</option><option value="已结单">已结单</option></select><button id="refreshRooms" type="button">刷新</button></div></div>
+            <div class="room-list" id="roomsList"></div>
+          </section>
+        </main>
+      </div>
     </div>
 
     <div class="admin-modal" id="createModal" hidden>
