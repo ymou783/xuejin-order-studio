@@ -375,5 +375,7 @@ $("copyRoomLink").addEventListener("click", async () => {
 Object.values(fields).forEach((field) => field.addEventListener("input", () => { if (field !== fields.notice) renderReceipt(); }));
 
 updateBeijingClock();
-if (loadOrderFromQuery()) renderReceipt(); else parseNotice();
+window.XuejinSyncReady.then(() => {
+  if (loadOrderFromQuery()) renderReceipt(); else parseNotice();
+});
 window.setInterval(updateBeijingClock, 1000);

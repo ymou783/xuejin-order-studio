@@ -14,6 +14,7 @@ function nowText() { return new Intl.DateTimeFormat("zh-CN", {timeZone: "Asia/Sh
 function escapeHtml(value) { return String(value).replace(/[&<>"']/g, (character) => ({"&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"}[character])); }
 function isStarted() { return Number.isFinite(state.baseline); }
 function isEnded() { return isStarted() && state.remaining < 0; }
+function isLowGuarantee() { return isStarted() && state.remaining >= -100 && state.remaining <= 0; }
 
 function saveState() {
   if (!orderId) return;
@@ -136,6 +137,12 @@ function canAdjust() {
 }
 
 function openFeedbackModal() {
+  if (isLowGuarantee()) {
+    $("lowGuaranteeModal").hidden = false;
+    $("closeLowGuarantee").focus();
+    setActionStatus("当前处于卡保底区间，请先补充保底。", true);
+    return;
+  }
   if (!isEnded()) { setActionStatus("基础保底小于 0 后才能结束订单。", true); return; }
   $("feedbackError").textContent = "";
   $("feedbackModal").hidden = false;
@@ -187,6 +194,7 @@ function render() {
   $("roomKey").textContent = orderId || "缺少订单号";
   $("remainingGuarantee").textContent = started ? formatW(state.remaining) : "--";
   $("guaranteeHint").textContent = started ? `基础保底 ${formatW(state.baseline)}W` : "设置基础保底后开始计算";
+  $("guaranteeAlert").hidden = !isLowGuarantee();
   $("successCount").textContent = state.successCount;
   $("totalGames").textContent = state.totalGames;
   $("successRate").textContent = state.totalGames ? `${((state.successCount / state.totalGames) * 100).toFixed(1)}%` : "0%";
@@ -212,6 +220,9 @@ function initializeRoom() {
   loadState();
   $("baselineModal").hidden = isStarted();
   render();
+  if (window.XuejinCloud?.isEnabled()) {
+    window.XuejinCloud.watchRoom(orderId, () => { loadState(); render(); });
+  }
 }
 
 $("startRoomButton").addEventListener("click", () => {
@@ -253,5 +264,7 @@ $("adjustGuaranteeInput").addEventListener("keydown", (event) => { if (event.key
 $("endOrderButton").addEventListener("click", openFeedbackModal);
 $("cancelFeedback").addEventListener("click", () => { $("feedbackModal").hidden = true; });
 $("submitFeedback").addEventListener("click", submitFeedback);
+$("closeLowGuarantee").addEventListener("click", () => { $("lowGuaranteeModal").hidden = true; $("adjustGuaranteeButton").focus(); });
+$("lowGuaranteeModal").addEventListener("click", (event) => { if (event.target.id === "lowGuaranteeModal") $("lowGuaranteeModal").hidden = true; });
 
-initializeRoom();
+window.XuejinSyncReady.then(initializeRoom);

@@ -33,6 +33,7 @@
               <div class="balance-label"><span class="pulse-dot"></span>当前剩余保底</div>
               <div class="balance-value"><strong id="remainingGuarantee">--</strong><span>W</span></div>
               <p id="guaranteeHint">设置基础保底后开始计算</p>
+              <p class="guarantee-alert" id="guaranteeAlert" hidden>卡保底啦，快去补保底。</p>
             </div>
 
             <div class="action-card">
@@ -137,6 +138,15 @@
       </div>
     </div>
 
+    <div class="low-guarantee-modal" id="lowGuaranteeModal" hidden role="alertdialog" aria-modal="true" aria-labelledby="lowGuaranteeTitle">
+      <div class="low-guarantee-dialog">
+        <div class="low-guarantee-icon">⚠</div>
+        <p class="low-guarantee-kicker">GUARANTEE ALERT</p>
+        <h2 id="lowGuaranteeTitle">你TM卡保底了，快去补保底。</h2>
+        <button class="low-guarantee-close" id="closeLowGuarantee" type="button">知道了，去补保底</button>
+      </div>
+    </div>
+
     <div class="adjustment-modal" id="adjustmentModal" hidden>
       <div class="adjustment-dialog">
         <span class="room-kicker">GUARANTEE ADJUSTMENT</span>
@@ -150,6 +160,9 @@
     </div>
 
     <div class="room-toast" id="roomToast" role="status" aria-live="polite"></div>
+    <script src="cloudbase-config.js"></script>
+    <script src="https://static.cloudbase.net/cloudbase-js-sdk/2.27.1/cloudbase.full.js"></script>
+    <script src="cloudbase-sync.js"></script>
     <script src="room.js"></script>
   </body>
 </html>

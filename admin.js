@@ -92,6 +92,7 @@ function clearLogs(orderId) {
 
 function deleteRoom(orderId) {
   if (!window.confirm(`确定要删除房间 ${orderId} 及其全部日志吗？此操作不可恢复。`)) return;
+  window.XuejinCloud?.deleteRoom(orderId);
   localStorage.removeItem(`xuejin-order:${orderId}`); localStorage.removeItem(`xuejin-service-room:${orderId}`);
   writeJson(roomIndexKey, readJson(roomIndexKey, []).filter((room) => room.orderId !== orderId));
   showToast("房间和相关日志已删除。"); renderRooms();
@@ -138,6 +139,7 @@ function initializeAdmin() {
     if (button.dataset.action === "delete") deleteRoom(orderId);
   });
   updateClock(); window.setInterval(updateClock, 1000); renderRooms();
+  if (window.XuejinCloud?.isEnabled()) window.XuejinCloud.watchAll(() => renderRooms());
 }
 
 async function unlockAdmin() {
@@ -150,9 +152,9 @@ async function unlockAdmin() {
   }
   sessionStorage.setItem(adminAuthKey, "1");
   $("adminGateError").textContent = "";
-  initializeAdmin();
+  window.XuejinSyncReady.then(initializeAdmin);
 }
 
 $("adminGateForm").addEventListener("submit", (event) => { event.preventDefault(); unlockAdmin(); });
 $("adminPassword").addEventListener("keydown", (event) => { if (event.key === "Enter") unlockAdmin(); });
-if (sessionStorage.getItem(adminAuthKey) === "1") initializeAdmin();
+if (sessionStorage.getItem(adminAuthKey) === "1") window.XuejinSyncReady.then(initializeAdmin);

@@ -18,32 +18,44 @@ function readJson(key, fallback) { try { return JSON.parse(localStorage.getItem(
 function escapeSvg(value) { return String(value).replace(/[&<>"']/g, (character) => ({"&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&apos;"}[character])); }
 function safeOrderId(value) { return (value || "receipt").replace(/[^a-zA-Z0-9_-]/g, "-"); }
 
-const state = readJson(serviceKey, {orderId, totalGames:0, successCount:0, totalEaten:0, records:[], feedback:{}});
-const order = readJson(orderKey, {orderId});
-const feedback = state.feedback || {};
-const date = beijingDate();
-const totalGames = Number(state.totalGames || 0);
-const successCount = Number(state.successCount || 0);
-const successRate = totalGames ? ((successCount / totalGames) * 100).toFixed(1) : "0.0";
-const companionChanges = Array.isArray(state.companionChanges) ? state.companionChanges : [];
-const companionTrail = companionChanges.length ? companionChanges.map((change) => `${change.from} → ${change.to}`).join("；") : "无陪陪修改记录";
-const finalCompanion = state.currentCompanion || order.companion || "";
+let state;
+let order;
+let feedback;
+let date;
+let totalGames;
+let successCount;
+let successRate;
+let companionTrail;
+let finalCompanion;
 
-$("settlementDate").textContent = date.short;
-$("settlementDateLong").textContent = date.long;
-$("settlementType").textContent = order.type || order.project || "体验-体验单-128保688W";
-$("settlementAmount").textContent = order.amount ? `¥${order.amount.replace(/[¥￥]/g, "")}` : "¥128";
-$("settlementBoard").textContent = order.board || "";
-$("settlementCompanion").textContent = finalCompanion;
-$("settlementOrderId").textContent = orderId || "待填写";
-$("settlementOrderNote").textContent = `备注：${companionTrail}`;
-$("settlementRecord").textContent = `总撤离 ${totalGames}撤 · 成功撤离 ${successCount}撤`;
-$("settlementRate").textContent = `${successRate}%`;
-$("settlementEaten").textContent = plainNumber(state.totalEaten || 0);
-$("technicalSummary").textContent = scoreText[feedback.technical] || "未填写";
-$("attitudeSummary").textContent = scoreText[feedback.attitude] || "未填写";
-$("feedbackSummaryNote").textContent = feedback.note || "未填写";
-$("returnRoom").href = `room.html?orderId=${encodeURIComponent(orderId)}`;
+function renderSettlement() {
+  state = readJson(serviceKey, {orderId, totalGames:0, successCount:0, totalEaten:0, records:[], feedback:{}});
+  order = readJson(orderKey, {orderId});
+  feedback = state.feedback || {};
+  date = beijingDate();
+  totalGames = Number(state.totalGames || 0);
+  successCount = Number(state.successCount || 0);
+  successRate = totalGames ? ((successCount / totalGames) * 100).toFixed(1) : "0.0";
+  const companionChanges = Array.isArray(state.companionChanges) ? state.companionChanges : [];
+  companionTrail = companionChanges.length ? companionChanges.map((change) => `${change.from} → ${change.to}`).join("；") : "无陪陪修改记录";
+  finalCompanion = state.currentCompanion || order.companion || "";
+
+  $("settlementDate").textContent = date.short;
+  $("settlementDateLong").textContent = date.long;
+  $("settlementType").textContent = order.type || order.project || "体验-体验单-128保688W";
+  $("settlementAmount").textContent = order.amount ? `¥${String(order.amount).replace(/[¥￥]/g, "")}` : "¥128";
+  $("settlementBoard").textContent = order.board || "";
+  $("settlementCompanion").textContent = finalCompanion;
+  $("settlementOrderId").textContent = orderId || "待填写";
+  $("settlementOrderNote").textContent = `备注：${companionTrail}`;
+  $("settlementRecord").textContent = `总撤离 ${totalGames}撤 · 成功撤离 ${successCount}撤`;
+  $("settlementRate").textContent = `${successRate}%`;
+  $("settlementEaten").textContent = plainNumber(state.totalEaten || 0);
+  $("technicalSummary").textContent = scoreText[feedback.technical] || "未填写";
+  $("attitudeSummary").textContent = scoreText[feedback.attitude] || "未填写";
+  $("feedbackSummaryNote").textContent = feedback.note || "未填写";
+  $("returnRoom").href = `room.html?orderId=${encodeURIComponent(orderId)}`;
+}
 
 function settlementSvg() {
   const safeOrder = orderId || "待填写";
@@ -93,3 +105,13 @@ function saveSettlementImage() {
 }
 
 $("saveImageButton").addEventListener("click", saveSettlementImage);
+
+window.XuejinSyncReady.then(() => {
+  renderSettlement();
+  if (window.XuejinCloud?.isEnabled()) {
+    window.XuejinCloud.watchRoom(orderId, () => renderSettlement());
+  }
+  window.addEventListener("xuejin-cloud-updated", (event) => {
+    if (event.detail?.orderId === orderId) renderSettlement();
+  });
+});
