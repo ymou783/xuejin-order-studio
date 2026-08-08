@@ -377,5 +377,13 @@ Object.values(fields).forEach((field) => field.addEventListener("input", () => {
 updateBeijingClock();
 window.XuejinSyncReady.then(() => {
   if (loadOrderFromQuery()) renderReceipt(); else parseNotice();
+  const queryOrderId = new URLSearchParams(window.location.search).get("orderId");
+  if (queryOrderId && window.XuejinSql?.isEnabled()) {
+    window.XuejinSql.watchRoom(queryOrderId, () => {
+      const active = document.activeElement;
+      if (active && ["INPUT", "TEXTAREA"].includes(active.tagName)) return;
+      if (loadOrderFromQuery()) renderReceipt();
+    });
+  }
 });
 window.setInterval(updateBeijingClock, 1000);

@@ -1,0 +1,12 @@
+{
+  "name": "xuejin-esports-room",
+  "version": "1.0.0",
+  "private": true,
+  "description": "雪烬电竞订单与服务房间（Node.js + SQLite）",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "start": "node server.js"
+  }
+}

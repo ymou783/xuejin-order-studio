@@ -2,4 +2,5 @@
 work/
 outputs/
 node_modules/
-
+data/*.sqlite
+data/*.sqlite-*

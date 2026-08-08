@@ -92,7 +92,7 @@ function clearLogs(orderId) {
 
 function deleteRoom(orderId) {
   if (!window.confirm(`确定要删除房间 ${orderId} 及其全部日志吗？此操作不可恢复。`)) return;
-  window.XuejinCloud?.deleteRoom(orderId);
+  window.XuejinSql?.deleteRoom(orderId);
   localStorage.removeItem(`xuejin-order:${orderId}`); localStorage.removeItem(`xuejin-service-room:${orderId}`);
   writeJson(roomIndexKey, readJson(roomIndexKey, []).filter((room) => room.orderId !== orderId));
   showToast("房间和相关日志已删除。"); renderRooms();
@@ -139,7 +139,7 @@ function initializeAdmin() {
     if (button.dataset.action === "delete") deleteRoom(orderId);
   });
   updateClock(); window.setInterval(updateClock, 1000); renderRooms();
-  if (window.XuejinCloud?.isEnabled()) window.XuejinCloud.watchAll(() => renderRooms());
+  if (window.XuejinSql?.isEnabled()) window.XuejinSql.watchAll(() => renderRooms());
 }
 
 async function unlockAdmin() {

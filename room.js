@@ -220,8 +220,8 @@ function initializeRoom() {
   loadState();
   $("baselineModal").hidden = isStarted();
   render();
-  if (window.XuejinCloud?.isEnabled()) {
-    window.XuejinCloud.watchRoom(orderId, () => { loadState(); render(); });
+  if (window.XuejinSql?.isEnabled()) {
+    window.XuejinSql.watchRoom(orderId, () => { loadState(); render(); });
   }
 }
 

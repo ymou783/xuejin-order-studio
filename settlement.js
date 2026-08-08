@@ -108,10 +108,10 @@ $("saveImageButton").addEventListener("click", saveSettlementImage);
 
 window.XuejinSyncReady.then(() => {
   renderSettlement();
-  if (window.XuejinCloud?.isEnabled()) {
-    window.XuejinCloud.watchRoom(orderId, () => renderSettlement());
+  if (window.XuejinSql?.isEnabled()) {
+    window.XuejinSql.watchRoom(orderId, () => renderSettlement());
   }
-  window.addEventListener("xuejin-cloud-updated", (event) => {
+  window.addEventListener("xuejin-sql-updated", (event) => {
     if (event.detail?.orderId === orderId) renderSettlement();
   });
 });
