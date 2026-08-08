@@ -18,3 +18,23 @@ body::before { content:""; position:fixed; inset:0; pointer-events:none; opacity
 .settlement-actions { display:flex; justify-content:center; gap:10px; margin-top:22px; }.settlement-actions button,.settlement-actions a { min-width:130px; height:42px; padding:0 15px; border:1px solid rgba(48,33,46,.15); border-radius:10px; color:#59435b; background:rgba(255,250,241,.75); font-size:11px; text-align:center; text-decoration:none; }.settlement-actions button { cursor:pointer; }.settlement-actions a { display:grid; place-items:center; color:#fffaf0; background:#59435b; border-color:#59435b; }.settlement-actions a span { margin-left:6px; color:#f3c2ba; }.settlement-actions button:hover { border-color:var(--settle-coral); color:var(--settle-coral); }.settlement-actions a:hover { background:#4b3850; }
 @media (max-width:620px) { .settlement-shell { padding:0 13px 42px; }.settlement-topbar { height:70px; }.settlement-brand { font-size:11px; }.settlement-topbar a { font-size:11px; }.settlement-ticket-stage { padding:16px; }.settlement-receipt { padding:28px 28px 23px; }.settlement-receipt .receipt-title { font-size:28px; }.settlement-receipt .receipt-line { min-height:36px; font-size:11px; }.settlement-receipt .receipt-line b { flex-basis:48%; }.settlement-receipt .receipt-line > span,.settlement-receipt .receipt-line .amount-value { font-size:11px; }.settlement-receipt .receipt-line b i { width:16px; font-size:14px; }.settlement-receipt .order-id-line { font-size:10px; }.settlement-receipt .order-id-line code { font-size:9px; }.settlement-receipt .receipt-landscape { height:90px; }.settlement-actions { width:100%; }.settlement-actions button,.settlement-actions a { flex:1; min-width:0; } }
 @media print { body { background:#fff; }.settlement-shell { padding:0; }.settlement-topbar,.settlement-actions { display:none; }.settlement-layout { padding:0; }.settlement-ticket-stage { width:100%; padding:0; background:none; box-shadow:none; }.settlement-receipt { width:100%; max-width:520px; margin:0 auto; box-shadow:none; transform:none; } }
+
+/* Keep the settlement summary readable and leave a clear gap before the landscape. */
+.settlement-receipt .receipt-topline { font-size:15px; }
+.settlement-receipt .brand-mini { font-size:15px; }
+.settlement-receipt .receipt-title { font-size:34px; }
+.settlement-receipt .receipt-badge { font-size:13px; }
+.settlement-receipt .receipt-line { min-height:43px; font-size:13px; }
+.settlement-receipt .settlement-stat-line { min-height:39px !important; }
+.settlement-receipt .receipt-date-line { margin-top:14px; font-size:12px; }
+.settlement-receipt .receipt-date-line span:last-child { font-size:11px; }
+.settlement-receipt .receipt-landscape { margin-top:14px; }
+.settlement-thanks { margin-top:11px; }
+
+@media (max-width:620px) {
+  .settlement-receipt .receipt-title { font-size:30px; }
+  .settlement-receipt .receipt-line { min-height:39px; font-size:12px; }
+  .settlement-receipt .settlement-stat-line { min-height:36px !important; }
+  .settlement-receipt .receipt-date-line { margin-top:12px; }
+  .settlement-receipt .receipt-landscape { margin-top:12px; }
+}

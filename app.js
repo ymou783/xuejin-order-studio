@@ -38,7 +38,7 @@ function readLine(text, label) {
 }
 
 function readCompanionFromRemark(remark) {
-  const match = remark.match(/派\s*[:：]?\s*(.+)$/);
+  const match = String(remark).match(/派(?:单)?\s*[:：]?\s*(.+)$/);
   return match ? match[1].trim() : "";
 }
 
@@ -54,7 +54,7 @@ function parseNotice() {
     gameType: readLine(text, "游戏类型"), remark: readLine(text, "下单项目")
   };
   if (values.amount) values.amount = values.amount.replace(/[¥￥,\s]/g, "");
-  if (values.remark.startsWith("备注：")) values.remark = values.remark.slice(3).trim();
+  values.remark = values.remark.replace(/^备注\s*[:：]\s*/, "").trim();
   const companion = readCompanionFromRemark(values.remark);
   if (values.project) fields.receiptType.value = values.project;
   if (companion) fields.companion.value = companion;
@@ -293,7 +293,7 @@ async function saveReceiptImage() {
   saveButton.disabled = true;
   const unlockSave = () => { saveInProgress = false; saveCooldownUntil = Date.now() + 2000; saveButton.disabled = false; };
   renderReceipt();
-  const svg = exportReceiptSvgCompact();
+  const svg = polishReceiptSvg(exportReceiptSvgCompact());
   const svgBlob = new Blob([svg], {type: "image/svg+xml;charset=utf-8"});
   const svgUrl = URL.createObjectURL(svgBlob);
   const image = new Image();
@@ -330,6 +330,16 @@ async function saveReceiptImage() {
   window.setTimeout(() => $("toast").classList.remove("show"), 2200);
 }
 
+function polishReceiptSvg(svg) {
+  return svg
+    .replace(/\s*<text x="500" y="150"[\s\S]*?<\/text><text x="500" y="177"[\s\S]*?<\/text>/, "")
+    .replace(/font-size="22" font-weight="800">雪烬电竞·/, 'font-size="30" font-weight="800">雪烬电竞·')
+    .replace(/font-size:27px/g, "font-size:30px")
+    .replace(/font-size:25px/g, "font-size:28px")
+    .replace(/font-size:19px/g, "font-size:21px")
+    .replace(/font-size:58px/g, "font-size:64px");
+}
+
 async function copyReceipt() {
   renderReceipt();
   const text = receiptText();
@@ -347,6 +357,11 @@ async function copyReceipt() {
 }
 
 $("parseButton").addEventListener("click", parseNotice);
+$("clearNoticeButton").addEventListener("click", () => {
+  fields.notice.value = "";
+  fields.notice.focus();
+  setStatus("已清空粘贴框。", true);
+});
 $("generateButton").addEventListener("click", () => { renderReceipt(); if (ensureRoomCreated()) setStatus("小票已生成，独立服务房间也已创建。", true); });
 $("copyButton").addEventListener("click", copyReceipt);
 $("saveButton").addEventListener("click", saveReceiptImage);

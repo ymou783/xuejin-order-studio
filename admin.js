@@ -108,18 +108,51 @@ function createRoom() {
   window.open(pageUrl("room.html", orderId), "_blank");
 }
 
-$("openCreateRoom").addEventListener("click", () => { $("createError").textContent = ""; $("createModal").hidden = false; $("newOrderId").focus(); });
-$("createRoom").addEventListener("click", createRoom);
-$("newOrderId").addEventListener("keydown", (event) => { if (event.key === "Enter") createRoom(); });
-$("refreshRooms").addEventListener("click", renderRooms);
-$("searchRooms").addEventListener("input", renderRooms);
-$("statusFilter").addEventListener("change", renderRooms);
-document.querySelectorAll("[data-close]").forEach((button) => button.addEventListener("click", () => { $(button.dataset.close).hidden = true; }));
-$("roomsList").addEventListener("click", (event) => {
-  const button = event.target.closest("button[data-action]"); if (!button) return;
-  const card = button.closest("[data-order-id]"); const orderId = card?.dataset.orderId; if (!orderId) return;
-  if (button.dataset.action === "logs") showLogs(orderId);
-  if (button.dataset.action === "clear") clearLogs(orderId);
-  if (button.dataset.action === "delete") deleteRoom(orderId);
-});
-updateClock(); window.setInterval(updateClock, 1000); renderRooms();
+const adminAuthKey = "xuejin-admin-authenticated";
+const adminPasswordHash = "c5a00f7e33dc53de93e423c01e25449588e4efa81dec57a35174abdc2c8fe8c7";
+let adminBooted = false;
+
+async function hashText(value) {
+  const bytes = new TextEncoder().encode(value);
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
+}
+
+function initializeAdmin() {
+  if (adminBooted) return;
+  adminBooted = true;
+  $("adminGate").hidden = true;
+  $("adminApp").hidden = false;
+  $("openCreateRoom").addEventListener("click", () => { $("createError").textContent = ""; $("createModal").hidden = false; $("newOrderId").focus(); });
+  $("createRoom").addEventListener("click", createRoom);
+  $("newOrderId").addEventListener("keydown", (event) => { if (event.key === "Enter") createRoom(); });
+  $("refreshRooms").addEventListener("click", renderRooms);
+  $("searchRooms").addEventListener("input", renderRooms);
+  $("statusFilter").addEventListener("change", renderRooms);
+  document.querySelectorAll("[data-close]").forEach((button) => button.addEventListener("click", () => { $(button.dataset.close).hidden = true; }));
+  $("roomsList").addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-action]"); if (!button) return;
+    const card = button.closest("[data-order-id]"); const orderId = card?.dataset.orderId; if (!orderId) return;
+    if (button.dataset.action === "logs") showLogs(orderId);
+    if (button.dataset.action === "clear") clearLogs(orderId);
+    if (button.dataset.action === "delete") deleteRoom(orderId);
+  });
+  updateClock(); window.setInterval(updateClock, 1000); renderRooms();
+}
+
+async function unlockAdmin() {
+  const password = $("adminPassword").value;
+  if (!password) { $("adminGateError").textContent = "请输入后台密码。"; return; }
+  if (await hashText(password) !== adminPasswordHash) {
+    $("adminGateError").textContent = "密码不正确，请重试。";
+    $("adminPassword").select();
+    return;
+  }
+  sessionStorage.setItem(adminAuthKey, "1");
+  $("adminGateError").textContent = "";
+  initializeAdmin();
+}
+
+$("adminGateForm").addEventListener("submit", (event) => { event.preventDefault(); unlockAdmin(); });
+$("adminPassword").addEventListener("keydown", (event) => { if (event.key === "Enter") unlockAdmin(); });
+if (sessionStorage.getItem(adminAuthKey) === "1") initializeAdmin();

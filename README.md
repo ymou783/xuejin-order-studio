@@ -11,7 +11,7 @@
 ## 页面入口
 
 - `index.html`：订单小票工坊
-- `admin.html`：房间后台
+- `xuejin-ops-center-260808.html`：私有房间后台入口（需要密码）
 - `room.html?orderId=...`：独立服务房间
 - `settlement.html?orderId=...`：结单小票
 

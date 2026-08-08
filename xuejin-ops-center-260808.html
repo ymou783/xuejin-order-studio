@@ -11,6 +11,22 @@
     <link rel="stylesheet" href="admin.css" />
   </head>
   <body>
+    <div class="admin-gate" id="adminGate">
+      <div class="admin-gate-card">
+        <div class="admin-gate-mark">⛰</div>
+        <p class="admin-kicker">PRIVATE CONTROL CENTER</p>
+        <h1>后台入口</h1>
+        <p>请输入后台密码后继续。</p>
+        <form id="adminGateForm" novalidate>
+          <input class="sr-only" type="text" name="username" autocomplete="username" tabindex="-1" aria-hidden="true" />
+          <label for="adminPassword">访问密码</label>
+          <input id="adminPassword" type="password" autocomplete="current-password" placeholder="请输入密码" />
+          <button class="primary-admin-button full-button" id="unlockAdmin" type="submit">进入后台 <span>→</span></button>
+          <p class="admin-gate-error" id="adminGateError" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+    <div id="adminApp" hidden>
     <div class="admin-shell">
       <header class="admin-topbar">
         <a class="back-link" href="index.html">← 订单小票</a>
@@ -36,6 +52,7 @@
           <div class="room-list" id="roomsList"></div>
         </section>
       </main>
+    </div>
     </div>
 
     <div class="admin-modal" id="createModal" hidden>
